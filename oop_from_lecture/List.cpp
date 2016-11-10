@@ -132,7 +132,7 @@ int List::search(Time * t)
 
 void List::sort()
 {
-	throw NotSupportedException();//Пока не реализовано
+	throw NotSupportedException();//Не реализовано
 }
 
 void List::save(std::ofstream &ofs)
