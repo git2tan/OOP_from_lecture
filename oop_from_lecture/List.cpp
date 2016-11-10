@@ -70,7 +70,7 @@ void List::add(Time *t)	//Вставка в начало
 	count++;
 }
 
-Time * List::remove(int indx)
+Time * List::remove(int indx)	//Функция удалающая элемент по индексу
 {
 	Time * resData = NULL;
 	Elem * cure = head;
