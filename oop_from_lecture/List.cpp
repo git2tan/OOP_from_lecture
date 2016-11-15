@@ -176,3 +176,52 @@ int List::getCount()
 {
 	return this->count;
 }
+
+List & List::operator+(Time * t)
+{
+	this->add(t);
+	return *this;
+}
+
+List & List::operator+(const List & t)
+{
+	return this->concat(t);
+}
+
+List & List::operator-(Time *t)
+{
+	this->remove(t);
+	return *this;
+}
+
+List & List::operator-()
+{
+	this->~List();
+	return *this;
+}
+
+std::ostream & operator<<(std::ostream & os, List & t)
+{
+	os << t.count << std::endl;
+	List::Elem* cure = t.head;
+	while (cure != NULL)
+	{
+		os << *(cure->getData())<<"  ";	//Подразумеваем, что для Time функция "помещения в поток" уже пергергужена 
+		cure = cure->getNext();
+	}	
+	return os;
+}
+
+std::istream & operator >> (std::istream & is, List & t)
+{
+	std::cout << "Enter size:\n";
+	int size;
+	is >> size;
+	for (int i = 0; i < size; i++)
+	{
+		Time * tmp = new Time();
+		is >> *tmp;				//Подразумеваем, что для Time функция "взять из потока" уже пергергужена
+		t.add(tmp);
+	}
+	return is;
+}

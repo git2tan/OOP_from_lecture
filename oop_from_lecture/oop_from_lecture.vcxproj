@@ -146,10 +146,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CyList.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Time.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CyList.cpp" />
     <ClCompile Include="List.cpp" />
     <ClCompile Include="Time.cpp" />
   </ItemGroup>

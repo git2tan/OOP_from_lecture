@@ -1,6 +1,9 @@
 #pragma once
 #include <fstream>
+#include <iostream>
 #include "Time.h"
+
+/*14.11.16 Д/з добавить указатель last (указатель на конец списка) и доработать написанные алгоритмы*/
 
 class List						//Класс Список (List)
 {
@@ -27,10 +30,13 @@ protected:
 		Time *getData();		//Метод получающий содержимое объекта в виде указателя на объект типа Time (н-р: Time * tPtr = текущий_элемент.getData())
 		
 		int compare(Elem *);	//Метод для сравнения текущего объекта с передаваемым по указателю в параметрах (н-р: текущий_элемент.compare(объект с которым сравниваем))
+
 		int compare(Time * t);	//Возвращает в случае равенства 0, -1 - если obj1 < obj2, +1 - если obj1 > obj2
 	};
 
 	Elem *head;					//Переменная head для хранения указателя на заголовочный объект типа Elem
+
+	Elem *last;					//Перемення для хранения указателя на конечный элемент типа Elem
 	
 	int count;					//Переменная для хранения значения количества содержащихся элементов
 
@@ -61,4 +67,26 @@ public:
 	Time *get(int) const;		//Метод для получения указателя на содержимое (на объект типа Time) используя индекс
 	
 	int getCount();				//Меотод для получения количества элементов в списке. Возвращает int
+
+	List& operator+(Time *);	//прототип? перегрузки List + Time
+
+	List& operator+(const List&);	//Перегрузка List + List
+
+	List& operator-(Time*);			//Перегрузка List - Time
+
+	List& operator-();			//Перегрузка -List
+
+	friend std::ostream& operator<<(std::ostream &,List&);
+
+	friend std::istream& operator>> (std::istream &, List&);
 };
+
+/*
+	Перегрузка операторов
+	List + Time
+	List + List
+	List - Time
+	ios<<List
+	ios>>List
+	-List	
+	*/
