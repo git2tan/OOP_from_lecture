@@ -76,9 +76,9 @@ public:
 
 	List& operator-();			//Перегрузка -List
 
-	friend std::ostream& operator<<(std::ostream &,List&);
+	friend std::ostream& operator<<(std::ostream &,List&);		//Перегрузка оператора помещения в поток
 
-	friend std::istream& operator>> (std::istream &, List&);
+	friend std::istream& operator>> (std::istream &, List&);	//Перегрузка оператора извлечения из потока
 };
 
 /*

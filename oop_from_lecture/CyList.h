@@ -1,6 +1,6 @@
 #pragma once
 #include "List.h"
-class CyList:public List
+class CyList:public List		//Класс CyList наследован от класса List
 {
 public:
 	CyList();

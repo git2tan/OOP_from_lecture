@@ -22,3 +22,13 @@ void Time::load(std::ifstream &)
 {
 
 }
+
+std::ostream & operator<<(std::ostream &os, Time &t)
+{
+	return os;
+}
+
+std::istream & operator >> (std::istream &is, Time &t)
+{
+	return is;
+}
