@@ -1,227 +1,236 @@
 #include "List.h"
 //-----------------------------------------------------------------------------------------------------
 //Methods class Elem
-
-List::Elem::Elem(Time *t)
-{
-	data = t;
-	next = NULL;
-}
-List::Elem::Elem(const List::Elem & t)
-{
-	data = t.data;
-	next = t.next;
+//Конструкторы:
+List::Elem::Elem(Time *t)							//конструктор класса Elem принимает на вход указатель на тип Time (Time *t)
+{													
+	data = t;										//приравниваем указатель на содержимое указателю на передаваемый на вход
+	next = NULL;									//указатель на следующий принудительно устанавливаем на NULL
 }
 
-List::Elem::~Elem()
+List::Elem::Elem(const List::Elem & t)				//Конструктор копирования. На воход принимает другой объект такого же типа (Elem)
 {
-	data = NULL;
-	next = NULL;
+	this->data = t.data;							//Устанавливаем новому созданному объекту (this) данные из передаваемого на вход
+	this->next = t.next;							//---//---
 }
 
-List::Elem * List::Elem::getNext()
+//Деструктор:
+List::Elem::~Elem()									//Деструктор
 {
-	return this->next;
+	data = NULL;									//Устанавливаем значения переменных объекта как NULL
+	next = NULL;									//---//---
 }
 
-void List::Elem::setNext(List::Elem * next)
-{
-	this->next = next;
+//Геттеры:
+List::Elem * List::Elem::getNext()					//Метод при вызове которого получаем указатель на следующий элемент (то на что указывает указатель next)
+{													
+	return this->next;//можно просто next			//Так как возвращаемый тип это указатель, то возвращаем указатель next у текущего объекта
 }
 
-Time * List::Elem::getData()
+Time * List::Elem::getData()						//Метод получающий содержимое объекта в виде указателя на объект типа Time (н-р: Time * tPtr = текущий_элемент.getData())
 {
-	return this->data;
+	return this->data;								//можно просто data
 }
 
-int List::Elem::compare(Elem *t)
+//Сеттер:
+void List::Elem::setNext(List::Elem * next)			//Метод позволяющий устанавливать связь между текущим объектом и следующим (установить следующий)
 {
-	return this->data->compare(*(t->data));
+	this->next = next;								//так как метод принимает указатель на элемент то установка следуещего происходит через присваивание указателей
 }
 
-int List::Elem::compare(Time * t)
+//Методы сравнения:
+int List::Elem::compare(Elem *t)					//Метод для сравнения текущего объекта с передаваемым по указателю в параметрах (н-р: текущий_элемент.compare(объект с которым сравниваем))
 {
-	return this->data->compare(*t);
+	return this->data->compare(*(t->data));			//т.к. у типа Time реализован метод compare то вызываем его у текущего элемента Elem (this) обращаясь к его содержимому-указателю на Time
 }
+
+int List::Elem::compare(Time * t)					//Возвращает в случае равенства 0, -1 - если obj1 < obj2, +1 - если obj1 > obj2
+{
+	return this->data->compare(*t);					//Аналогично предыдущему методу
+}
+
 //----------------------------------------------------------------------------------------------------------
 //Methods class List
 
-List::List():head(NULL), count(0)
+//Конструктор:
+List::List():head(NULL), count(0)		//Используя список инициалиции присваиваем значению head NULL
 {
 }
 
+//Деструктор:
 List::~List()
 {
-	Elem * cure = head;
-	while (head != NULL)
-	{
-		head = head->getNext();
-		delete cure;
-		cure = head;
+	Elem * cure = head;			//Устанавливаем временный указатель типа Elem на головной элемент
+	while (head != NULL)		//Пока головной элемент не равен NULL
+	{							
+		head = head->getNext();	//Переводим указатель на головной элемент на следующий
+		delete cure;			//Удаляем текущий
+		cure = head;			//Устанавливаем временный указатель на новый головной элемент
 	}
-	count = 0;
+	count = 0;					//обнуляем значение переменной для хранения количества
 }
 
-void List::add(Time *t)	//Вставка в начало
+void List::add(Time *t)			//Добавление используя указатель на объект типа Time
 {
-	Elem * n = new Elem(t);
-	n->setNext(head);
-	head = n;
-	count++;
+	Elem * n = new Elem(t);		//Выделяем память для хранения нового объекта типа Elem и вызываем конструктор копирования
+	n->setNext(head);			//Устанавливаем у созданного в предыдущей строке следущим головной элемент (АЛГОРИТМ ВСТАВКИ В НАЧАЛО СПИСКА)
+	head = n;					//Устанавливаем у этого списка указатель на новый заглавный элемент
+	count++;					//Увеличиваем счетчик количества элементов
 }
 
-Time * List::remove(int indx)	//Функция удалающая элемент по индексу
+Time * List::remove(int indx)			//Функция удалающая элемент по индексу
 {
-	Time * resData = NULL;
-	Elem * cure = head;
-	if (indx < count&&indx >= 0)
+	Time * resData = NULL;				//Создаем указатель на тип Time и устанавливаем его в NULL
+	Elem * cure = head;					//Создаем указатель на тип Elem и устанавливаем его на заглавный элемент
+	if (indx < count&&indx >= 0)		//Если индекс корректный (меньше количества и больше либо равен 0)
 	{
-		if (indx == 0)
+		if (indx == 0)					//Если хотим удалить заглавный элемент
 		{
-			head = head->getNext();
-			resData = cure->getData();
-			delete cure;
+			head = head->getNext();		//устанавливаем указатель который ранее указывал на заглавный элемент на следующий после заглавного
+			resData = cure->getData();	//сохраняем указатель на данные которые хранились
+			delete cure;				//удаляем объект типа Elem
 		}
-		else
+		else							//Если хотим удалить не первый элемент
 		{
-			for (int i = 0; i < indx - 1; i++, cure = cure->getNext());
-			Elem * temp = cure->getNext();
-			cure->setNext(temp->getNext());
-			resData = temp->getData();
-			delete temp;
+			for (int i = 0; i < indx - 1; i++, cure = cure->getNext());	//пробегаем в цикле до нужного минус один (то есть остановимся на предыдущем перед нужным) 
+			Elem * temp = cure->getNext();		//Создадим указатель для хранения адреса следующего элемента (который и требутся удалить)
+			cure->setNext(temp->getNext());		//установим у текущего следующим после него элемент который идет после удаляемого
+			resData = temp->getData();			//Создадим указатель для хранения содержимого удаляемого элемента
+			delete temp;						//Удаляем элемент, но не содержимое
 		}
-		count--;
+		count--;						//Уменьшаем количество элементов на 1 
 	}
-	return resData;
+	return resData;						//Возвращаем указатель на хранимые в удаленном элементе данные
 }
 
-Time * List::remove(Time * t)
+Time * List::remove(Time * t)				//Удаление по содержимому (используя указатель на объект типа Time)
 {
-	return this->remove(this->search(t));
+	return this->remove(this->search(t));	//Удаляем элемент по индексу который вернет функция поиска индекса по содержимому
 }
 
-List& List::concat(const List& t)
+List& List::concat(const List& t)		//Соединение двух списков с возвращение самого списка в качестве параметра другой список
 {
-	for (int i = 0; i < t.count; i++)
+	for (int i = 0; i < t.count; i++)	//Пробегаем в цикле по передаваемому списку
 	{
-		this->add(t.get(i));
+		this->add(t.get(i));			//Добавляем каждый элемент используя перебор индексов
 	}
-	return *this;
+	return *this;						//Так работаем со ссылкой то возвращаем ссылку на самого себя
 }
 
-List& List::copy(const List & t)
+List& List::copy(const List & t)		//Копирование списка
 {
-	this->~List();
-	return this->concat(t);
+	this->~List();						//сначала принудительно вызываем деструктор для того чтобы быть уверенными в том что место свободно
+	return this->concat(t);				//Возвращаем результат работы функции concat(t)
 }
 
-int List::search(Time * t)
+int List::search(Time * t)				//Поиск по списку некого содержимого, на которое указывает указатель на объект типа Time, 
+										//в качестве результата возвращает индекс искомого элемента или -1 если не найдено
 {
-	int resIndx = -1, i = 0;
+	int resIndx = -1, i = 0;			//Создадим переменные для хранения результата и присвои ему значение -1
 
-	for (Elem * cure = head; cure != NULL; i++, cure = cure->getNext())
+	for (Elem * cure = head; cure != NULL; i++, cure = cure->getNext())	//Проходим в цикле по списку до конца
 	{
-		if (cure->compare(t) == 0)
+		if (cure->compare(t) == 0)		//если они равны
 		{
-			resIndx = i;
-			break;
+			resIndx = i;				//присваиваем результату текущий индекс
+			break;						//прерываем цикл
 		}
 	}
-	return resIndx;
+	return resIndx;						//возвращаем результат
 }
 
-void List::sort()
+void List::sort()						//Сортировка
 {
-	throw NotSupportedException();//Не реализовано
+	throw NotSupportedException();		//Не реализовано
 }
 
-void List::save(std::ofstream &ofs)
+void List::save(std::ofstream &ofs)		//Метод для сохранения в файл (сериализация)
 {
-	ofs << this->count << std::endl;
-	for (Elem*cure = head; cure != NULL; cure = cure->getNext())
+	ofs << this->count << std::endl;	//Записываем сначала количество элементов в файле
+	for (Elem*cure = head; cure != NULL; cure = cure->getNext())	//в цикле проходим по каждому элементу до конца цикла
 	{
-		cure->getData()->save(ofs);
+		cure->getData()->save(ofs);		//Используя метод который был ранее реализован в классе Time по сохранению данных в файл
 	}
 	//return ofs;
 }
 
-void List::load(std::ifstream &ifs)
+void List::load(std::ifstream &ifs)		//Метод для загрузки из файла (десериализация)
 {
-	int cnt;
-	this->~List();
-	ifs >>cnt;
-	for (int i = 0; i < cnt; i++)
+	int cnt;							//Заводим переменную для хранения количества элементов
+	this->~List();						//освобождаем память под считываемые данные
+	ifs >>cnt;							//Считываем из файла - сколько было записано элементов
+	for (int i = 0; i < cnt; i++)		//Скользко было записано в файл элементов - столько необходимо их считать
 	{
-		Time * t = new Time();
-		t->load(ifs);
-		this->add(t);
+		Time * t = new Time();			//Выделяем память под новый элемент типа Time
+		t->load(ifs);					//считываем данные
+		this->add(t);					//Добавляем в список
 	}
 }
 
-Time * List::get(int indx) const
+Time * List::get(int indx) const		//Метод для получения указателя на содержимое (на объект типа Time) используя индекс
 {
-	Time * resData = NULL;
-	if (indx < count&&indx >= 0)
+	Time * resData = NULL;				//Заводим указатель для хранения результата и записываем туда NULL чтобы в случае чего вернулось это значение
+	if (indx < count&&indx >= 0)		//если Индекс корректный
 	{
-		Elem * cure = head;
-		for (; indx != 0; indx--, cure = cure->getNext());
-		resData = cure->getData();
+		Elem * cure = head;				//заводим указатель и устанавливаем его на заглавный элемент
+		for (; indx != 0; indx--, cure = cure->getNext());	//Перемещаем указатель на следующий элемент "индекс" раз минус
+		resData = cure->getData();		//Сохраняем данные
 		//for (Elem * cure = head;; (indx != 0) ? (indx--, cure = cure->getNext()) : (return cure->getData()));
 		
 	}
-	return resData;
+	return resData;						//возвращаем данные (если индекс был задан неверно вернется NULL)
 }
 
-int List::getCount()
+int List::getCount()					//Метод для получения указателя на содержимое (на объект типа Time) используя индекс
 {
-	return this->count;
+	return this->count;					//Возвращаем количество элементов текущего списка
 }
 
-List & List::operator+(Time * t)
+List & List::operator+(Time * t)		//Перегрузка оператора "+" (для варианта: List + Time)
 {
-	this->add(t);
-	return *this;
+	this->add(t);						//Добавляем этот элемент типа Time  в текущий список
+	return *this;						//Возвращаем ссылку на этот же список
 }
 
-List & List::operator+(const List & t)
+List & List::operator+(const List & t)	//Перегрузка оператора "+" (для варианта: List +list)
 {
-	return this->concat(t);
+	return this->concat(t);				//Вернем ссылку на объединенный первый со вторым списком
 }
 
-List & List::operator-(Time *t)
+List & List::operator-(Time *t)			//Перегрузка оператора "-" (Для варианта: List - Time)
 {
-	this->remove(t);
-	return *this;
+	this->remove(t);					//удаляем элемент списка по содержимому
+	return *this;						//возвращаем ссылку на текущий список
 }
 
-List & List::operator-()
+List & List::operator-()				//Перегрузка оператора префиксного "-" (для варианта: -List)
 {
-	this->~List();
-	return *this;
+	this->~List();						//Вызываем деструктор для текущего списка
+	return *this;						//Возвращаем ссылку на него, то есть его самого
 }
 
-std::ostream & operator<<(std::ostream & os, List & t)
+std::ostream & operator<<(std::ostream & os, List & t)	//Перегрузка оператора помещения в поток
 {
-	os << t.count << std::endl;
-	List::Elem* cure = t.head;
-	while (cure != NULL)
+	os << t.count << std::endl;			//Помещаем в поток сначала количество элементов в списке, затем символ конца строки
+	List::Elem* cure = t.head;			//Создаем указатель на Elem и устанавливаем его на первый элемент
+	while (cure != NULL)				//Пока не конец списка
 	{
 		os << *(cure->getData())<<"  ";	//Подразумеваем, что для Time функция "помещения в поток" уже пергергужена 
-		cure = cure->getNext();
+		cure = cure->getNext();			//перемещаем указатель на следующий элемент в списке
 	}	
-	return os;
+	return os;							//возвращаем поток вывода
 }
 
-std::istream & operator >> (std::istream & is, List & t)
+std::istream & operator >> (std::istream & is, List & t)	//Перегрузка оператора извлечения из потока
 {
-	std::cout << "Enter size:\n";
-	int size;
-	is >> size;
-	for (int i = 0; i < size; i++)
+	std::cout << "Enter size:\n";		//выводим указание пользователю ввести количество элементов в списке
+	int size;							//заводим целочисленную переменную для хранения этого значения
+	is >> size;							//считываем из потока в эту переменную
+	for (int i = 0; i < size; i++)		//Пока не считано необходимое количество элемнтов
 	{
-		Time * tmp = new Time();
-		is >> *tmp;				//Подразумеваем, что для Time функция "взять из потока" уже пергергужена
-		t.add(tmp);
+		Time * tmp = new Time();		//Выделяем память под новый элемент типа Time
+		is >> *tmp;						//Подразумеваем, что для Time функция "взять из потока" уже пергегружена
+		t.add(tmp);						//Добавляем этот элемент в текущий список
 	}
-	return is;
+	return is;							//Возвращаем поток ввода
 }

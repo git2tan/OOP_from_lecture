@@ -1,12 +1,13 @@
 #pragma once
-#include "List.h"
+#include "List.h"				//подключаем класс-родитель?
+
 class CyList:public List		//Класс CyList наследован от класса List
 {
 public:
-	CyList();
-	void add(Time *);
-	Time * remove(int);
-	Time * remove(Time *);
+	CyList();					//Конструктор по умолчанию
+	void add(Time *);			//Метод добавления элемента Time
+	Time * remove(int);			//Метод удаления по индексу. Возвращает указатель на удаляемый элемент
+	Time * remove(Time *);		//Метод удаления по содержимому. Возвращает указатель на удаляемый элемент	
 };
 /*
 Пример:

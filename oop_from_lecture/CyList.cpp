@@ -1,28 +1,28 @@
 #include "CyList.h"
 
-CyList::CyList():List()
+CyList::CyList():List()						//В конструкторе через список инициализации вызываем конструктор родительского класса
 {
 }
 
-void CyList::add(Time * t)
+void CyList::add(Time * t)					//метод добавления элемента
 {
-	this->List::add(t);
-	this->last->setNext(this->head);
+	this->List::add(t);						//Используем родительский метод добавления элемента в список
+	this->last->setNext(this->head);		//Устанавливаем указатель последнего элемента на новое начало списка (т.к. список цикличный и последний элемент ссылается на первый) 
 }
 
-Time * CyList::remove(int indx)
+Time * CyList::remove(int indx)				//Удаляем элемент по индексу
 {
 	
-	Time *r = this->List::remove(indx);
-	if (last != NULL)
-		last->setNext(head);
-	return r;
+	Time *r = this->List::remove(indx);		//Используя родительский метод удаления удаляем элемент по индексу
+	if (last != NULL)						//Если хвостовой элемент не NULL
+		last->setNext(head);				//Устанавливаем слеудующим у хвостового элемента используя родительский метод setNext головной элемент
+	return r;								//возвращаем указатель на удаленный элемент
 }
 
-Time * CyList::remove(Time *t)
+Time * CyList::remove(Time *t)				//Удаляем элемент по содержимому
 {
-	Time *r = this->List::remove(t);
-	if (last != NULL)
-		last->setNext(head);
-	return r;
+	Time *r = this->List::remove(t);		//Заводим указатель и записываем туда результат работы родительской функции удаления по содержимому
+	if (last != NULL)						//если последний не равен NULL
+		last->setNext(head);				//Устанавливаем ему значение на заглавный элемент
+	return r;								//возвращаем указатель на удаленные данные
 }
