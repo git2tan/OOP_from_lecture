@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CyList.h" />
+    <ClInclude Include="ISaveLoader.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Time.h" />
   </ItemGroup>

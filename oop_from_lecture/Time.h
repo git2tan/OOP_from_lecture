@@ -5,7 +5,7 @@ class Time
 public:
 	Time();
 	~Time();
-	int compare(Time);
+	int compare(Time*);
 	void save(std::ofstream &);
 	void load(std::ifstream &);
 	friend std::ostream& operator<<(std::ostream &, Time&);

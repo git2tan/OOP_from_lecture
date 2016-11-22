@@ -8,7 +8,7 @@ Time::~Time()
 {
 }
 
-int Time::compare(Time)
+int Time::compare(Time*)
 {
 	return 0;
 }
